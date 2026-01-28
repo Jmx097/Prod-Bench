@@ -1,0 +1,29 @@
+presets:
+  youtube_voice_default:
+    chapters_text: |
+      Chapters <-- this is where you update the shownotes. do not edit any other sections -->
+      00:00:00 Introduction
+    algorithms:
+      leveler:
+        enabled: true
+        mode: default_leveler
+        strength_percent: 100
+        compressor: auto
+      filtering:
+        enabled: true
+        method: voice_autoeq
+      loudness:
+        enabled: true
+        target_lufs: -14
+        peak_mode: auto
+        true_peak_db: -1.0
+        dual_mono: false
+        method: program_loudness
+      noise:
+        enabled: true
+        denoise_method: dynamic
+        remove_noise_amount: 100
+        remove_reverb_amount: 100
+        remove_breaths: off
+      cutting:
+        enabled: false
