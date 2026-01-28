@@ -1,0 +1,53 @@
+{
+  "$schema": "./config_schema.json",
+  "version": "1.0.0",
+  "audio": {
+    "target_loudness_lufs": -16,
+    "highpass_hz": 80,
+    "lowpass_hz": 12000,
+    "compression_threshold_db": -20,
+    "compression_ratio": 3,
+    "presence_boost_hz": 3000,
+    "presence_boost_db": 2
+  },
+  "captions": {
+    "whisper_model": "base",
+    "language": "en",
+    "max_words_per_line": 10,
+    "max_chars_per_line": 42,
+    "use_api": true,
+    "burn_captions": false
+  },
+  "video": {
+    "lut_path": null,
+    "output_codec": "h264",
+    "crf": 18,
+    "hardware_acceleration": true,
+    "hardware_encoder": "h264_videotoolbox",
+    "software_encoder": "libx264",
+    "hardware_bitrate": "10M"
+  },
+  "thumbnails": {
+    "count": 6,
+    "width": 1280,
+    "height": 720,
+    "format": "jpg",
+    "quality": 95,
+    "strategy": "even_keyframes"
+  },
+  "backup": {
+    "enabled": true,
+    "backup_dir": ".backups",
+    "retention_days": 7
+  },
+  "logging": {
+    "output_dir": "logs",
+    "log_level": "INFO",
+    "persist_json": true
+  },
+  "pipeline": {
+    "temp_dir": ".tmp",
+    "cleanup_temp": true,
+    "fail_fast": false
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Video Pipeline Configuration",
+  "description": "Schema for production_config.json - Antigravity Video Production Pipeline",
+  "type": "object",
+  "required": ["version", "audio", "captions", "video", "thumbnails", "backup", "logging", "pipeline"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of config format"
+    },
+    "audio": {
+      "type": "object",
+      "required": ["target_loudness_lufs", "highpass_hz", "lowpass_hz", "compression_threshold_db", "compression_ratio"],
+      "properties": {
+        "target_loudness_lufs": {
+          "type": "number",
+          "minimum": -24,
+          "maximum": -10,
+          "description": "Target loudness in LUFS (YouTube standard: -16)"
+        },
+        "highpass_hz": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 200,
+          "description": "Highpass filter cutoff frequency"
+        },
+        "lowpass_hz": {
+          "type": "integer",
+          "minimum": 8000,
+          "maximum": 20000,
+          "description": "Lowpass filter cutoff frequency"
+        },
+        "compression_threshold_db": {
+          "type": "number",
+          "minimum": -40,
+          "maximum": 0,
+          "description": "Compressor threshold in dB"
+        },
+        "compression_ratio": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Compression ratio (e.g., 3 = 3:1)"
+        },
+        "presence_boost_hz": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 8000
+        },
+        "presence_boost_db": {
+          "type": "number",
+          "minimum": -6,
+          "maximum": 6
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "required": ["whisper_model", "language"],
+      "properties": {
+        "whisper_model": {
+          "type": "string",
+          "enum": ["tiny", "base", "small", "medium", "large"],
+          "description": "Whisper model size"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}$",
+          "description": "ISO 639-1 language code"
+        },
+        "max_words_per_line": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 20
+        },
+        "max_chars_per_line": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 80
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "required": ["output_codec", "crf", "hardware_acceleration"],
+      "properties": {
+        "lut_path": {
+          "type": ["string", "null"],
+          "description": "Path to LUT file for color grading"
+        },
+        "output_codec": {
+          "type": "string",
+          "enum": ["h264", "h265", "prores"]
+        },
+        "crf": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 51,
+          "description": "Constant Rate Factor (lower = higher quality)"
+        },
+        "hardware_acceleration": {
+          "type": "boolean"
+        },
+        "hardware_encoder": {
+          "type": "string"
+        },
+        "software_encoder": {
+          "type": "string"
+        },
+        "hardware_bitrate": {
+          "type": "string",
+          "pattern": "^\\d+[KMG]?$"
+        }
+      }
+    },
+    "thumbnails": {
+      "type": "object",
+      "required": ["count", "width", "height", "format", "quality"],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 320,
+          "maximum": 3840
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 180,
+          "maximum": 2160
+        },
+        "format": {
+          "type": "string",
+          "enum": ["jpg", "png", "webp"]
+        },
+        "quality": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "strategy": {
+          "type": "string",
+          "enum": ["even_keyframes", "scene_detection", "user_timestamps"],
+          "description": "Thumbnail extraction strategy"
+        }
+      }
+    },
+    "backup": {
+      "type": "object",
+      "required": ["enabled", "backup_dir", "retention_days"],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "backup_dir": {
+          "type": "string"
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "required": ["output_dir", "log_level", "persist_json"],
+      "properties": {
+        "output_dir": {
+          "type": "string"
+        },
+        "log_level": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR"]
+        },
+        "persist_json": {
+          "type": "boolean"
+        }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "required": ["temp_dir", "cleanup_temp", "fail_fast"],
+      "properties": {
+        "temp_dir": {
+          "type": "string"
+        },
+        "cleanup_temp": {
+          "type": "boolean"
+        },
+        "fail_fast": {
+          "type": "boolean",
+          "description": "If true, stop on first agent error. If false, continue with partial success."
+        }
+      }
+    }
+  }
+}
